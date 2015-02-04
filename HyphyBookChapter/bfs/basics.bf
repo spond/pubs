@@ -1,0 +1,3 @@
+DataSet myData = ReadDataFile ("data/four.seq");DataSetFilter myFilter = CreateFilter (myData,1);F81RateMatrix =                 {{* ,mu,mu,mu}                 {mu,* ,mu,mu}                 {mu,mu,* ,mu}                 {mu,mu,mu,* }};HarvestFrequencies (obsFreqs, myFilter, 1, 1, 1);
+Model F81 = (F81RateMatrix, obsFreqs);Tree myTree = ((a,b),c,d);LikelihoodFunction theLikFun = (myFilter, myTree);Optimize (MLEs, theLikFun);fprintf  (stdout, theLikFun);
+
