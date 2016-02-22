@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset="utf-8">
+    <!-- Latest compiled and minified CSS -->
+    <script src="//code.jquery.com/jquery.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+
+    <script src="//d3js.org/d3.v3.min.js"></script>
+    <script src="//veg.github.io/phylotree.js/phylotree.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+
+    <link href="//veg.github.io/phylotree.js/phylotree.css" rel="stylesheet">
+
+    <style>
+        .ui-autocomplete {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            z-index: 1000;
+            float: left;
+            display: none;
+            min-width: 160px;
+            _width: 160px;
+            padding: 4px 0;
+            margin: 2px 0 0 0;
+            list-style: none;
+            background-color: #ffffff;
+            border-color: #ccc;
+            border-color: rgba(0, 0, 0, 0.2);
+            border-style: solid;
+            border-width: 1px;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px;
+            -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+            -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+            -webkit-background-clip: padding-box;
+            -moz-background-clip: padding;
+            background-clip: padding-box;
+            *border-right-width: 2px;
+            *border-bottom-width: 2px;
+            .ui-menu-item > a.ui-corner-all {
+                display: block;
+                padding: 3px 15px;
+                clear: both;
+                font-weight: normal;
+                line-height: 18px;
+                color: #555555;
+                white-space: nowrap;
+                &.ui-state-hover,
+                &.ui-state-active {
+                    color: #ffffff;
+                    text-decoration: none;
+                    background-color: #0088cc;
+                    border-radius: 0px;
+                    -webkit-border-radius: 0px;
+                    -moz-border-radius: 0px;
+                    background-image: none;
+                }
+            }
+        }
+
+        .fa-rotate-45 {
+            -webkit-transform: rotate(45deg);
+            -moz-transform: rotate(45deg);
+            -ms-transform: rotate(45deg);
+            -o-transform: rotate(45deg);
+            transform: rotate(45deg);
+        }
+
+        .fa-rotate-135 {
+            -webkit-transform: rotate(135deg);
+            -moz-transform: rotate(135deg);
+            -ms-transform: rotate(135deg);
+            -o-transform: rotate(135deg);
+            transform: rotate(135deg);
+        }
+    </style>
+</head>
+
+<body style='padding-top: 70px;'>
+
+    <!--
+###############################################################################################################################
+-->
+
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Compartmentalized HIV Rebound</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Newick <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#" data-toggle="modal" data-target="#newick_modal">Input Text</a></li>
+                            <li>
+                                <a href="#">
+                                    <input type="file" id="newick_file" />
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li><a href="#" data-toggle="modal" data-target="#newick_export_modal">Export</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Options <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#" id='institution_label'>Color based on date</a></li>
+                            <li><a href="#" id='tree_set'>Show trees with DNA isolates</a></li>
+                        </ul>
+                    </li>
+                    <!--<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Display options <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="#" id = 'display_dengrogram'>Dendrogram</a></li>
+            <li><a href="#" id = 'display_tree'>Tree</a></li>
+             <li class="divider"></li>
+            <li><a href="#">Horizontal</a></li>
+            <li><a href="#">Vertical</a></li>
+          </ul>
+        </li>-->
+                </ul>
+
+
+                <div class="form-group navbar-form navbar-left">
+                    <input type="text" class="form-control" placeholder="Type here for available trees" id="trees">
+                </div>
+                <div class="form-group navbar-form navbar-right">
+                    <input type="text" id='branch_filter' class="form-control" placeholder="Filter branches on">
+                </div>
+
+
+
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
+
+    <div class="modal" id='newick_modal'>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Newick string to render</h4>
+                </div>
+                <div class="modal-body" id='newick_body'>
+                    <textarea id='nwk_spec' autofocus=t rue placeholder="" style='width: 100%; height: 100%' rows=2 0 selectionStart=1 selectionEnd=1 000>(a : 0.1, (b : 0.11, (c : 0.12, d : 0.13) : 0.14) : 0.15)</textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id='validate_newick'>Display this tree</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+    <div class="modal" id='newick_export_modal'>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body" id='newick_body'>
+                    <textarea id='nwk_export_spec' autofocus=t rue placeholder="" style='width: 100%; height: 100%' rows=2 0></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+    <div class='container' id="main_display">
+
+        <div class='row'>
+
+            <div class='col-md-12'>
+                <div class="btn-toolbar" role="toolbar">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default btn-sm" data-direction='vertical' data-amount='1' title="Expand vertical spacing">
+                            <i class="fa fa-arrows-v"></i>
+                        </button>
+                        <button type="button" class="btn btn-default btn-sm" data-direction='vertical' data-amount='-1' title="Compress vertical spacing">
+                            <i class="fa  fa-compress fa-rotate-135"></i>
+                        </button>
+                        <button type="button" class="btn btn-default btn-sm" data-direction='horizontal' data-amount='1' title="Expand horizonal spacing">
+                            <i class="fa fa-arrows-h"></i>
+                        </button>
+                        <button type="button" class="btn btn-default btn-sm" data-direction='horizontal' data-amount='-1' title="Compress horizonal spacing">
+                            <i class="fa  fa-compress fa-rotate-45"></i>
+                        </button>
+                        <button type="button" class="btn btn-default btn-sm" id="sort_ascending" title="Sort deepest clades to the bototm">
+                            <i class="fa fa-sort-amount-asc"></i>
+                        </button>
+                        <button type="button" class="btn btn-default btn-sm" id="sort_descending" title="Sort deepsest clades to the top">
+                            <i class="fa fa-sort-amount-desc"></i>
+                        </button>
+                        <button type="button" class="btn btn-default btn-sm" id="sort_original" title="Restore original order">
+                            <i class="fa fa-sort"></i>
+                        </button>
+                    </div>
+                    <div class="btn-group" data-toggle="buttons">
+                        <label class="btn btn-default  active btn-sm">
+                            <input type="radio" name="options-layout" class="phylotree-layout-mode" data-mode="linear" autocomplete="off" title="Layout left-to-right" checked> Linear
+                        </label>
+                        <label class="btn btn-default  btn-sm">
+                            <input type="radio" name="options-layout" class="phylotree-layout-mode" data-mode="radial" autocomplete="off" title="Layout radially"> Radial
+                        </label>
+                    </div>
+
+                    <div class="btn-group" data-toggle="buttons">
+                        <label class="btn btn-default btn-sm">
+                            <input type="radio" class="phylotree-align-toggler" data-align="left" name="options-align" autocomplete="off" title="Align tips labels to branches">
+                            <i class="fa fa-align-left"></i>
+                            </input>
+
+                        </label>
+                        <label class="btn btn-default active btn-sm">
+                            <input type="radio" class="phylotree-align-toggler" data-align="right" name="options-align" autocomplete="off" title="Align tips labels to the edge of the plot" checked>
+                            <i class="fa fa-align-right"></i>
+                            </input>
+                        </label>
+                    </div>
+
+                    <div class="btn-group">
+                        <label> Do not draw size bubbles </label>
+                        <input id="do_not_draw_bubbles" type="checkbox" />
+                    </div>
+
+                    <div class="btn-group">
+                        <label> Do now label tips </label>
+                        <input id="do_not_label_tips" type="checkbox" />
+                    </div>
+
+                    <label class="pull-right">Selected <span class="badge" id="selected_branch_counter">0</span> and filtered <span class="badge" id="selected_filtered_counter">0</span> branches</label>
+
+                </div>
+            </div>
+        </div>
+        <div class='row'>
+            <div class='col-md-12'>
+                <div id='tree_container' class='tree-widget'>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--
+###############################################################################################################################
+-->
+
+    <script>
+        var last_tree = null,
+            date_in = d3.time.format("%Y%m%d"),
+            date_out = d3.time.format("%B %d, %Y"),
+            unique_dates = null;
+            
+        haz_preART = {
+            '25839': true,
+            '26919': true,
+            '34535': true
+        };
+
+        function generate_unique_dates(node) {
+            if (node.children) {
+                _.each(node.children, generate_unique_dates);
+            } else {
+                var bits = node.name.split('|');
+                if (!(bits[0] in unique_dates)) {
+                    unique_dates[bits[0]] = {}
+                }
+                unique_dates[bits[0]][bits[1]] = true;
+            }
+        }
+
+        function generate_node_colors(node) {
+            if (node.children) {
+                node.node_color = null;
+                _.each(node.children, generate_node_colors);
+                colors = _.keys(_.groupBy(node.children, function(n) {
+                    return n.node_color;
+                }));
+
+                if (colors.length == 1 && colors[0]) {
+                    node.node_color = colors[0];
+                }
+
+            } else {
+                node.node_color = extract_node_key(node);
+                if (node.node_color) {
+                    if (label_on_compartment) {
+                        node.node_color = d3.rgb(node_color(node.node_color));
+                    } else {
+                        node.node_color = node_color(node.node_color);
+                    }
+                }
+            }
+        }
+
+        function load_from_url(url, bubbles, skip_tip_names) {
+            
+            d3.text(url, function(e, text) {
+                if (!e) {
+                    default_tree_settings(bubbles, skip_tip_names);
+                    tree_string = text;
+                    tree(tree_string);
+ 
+                    // see if there is a reference, reroot on it and
+                    // delete it
+
+                    var root_on = tree.get_nodes().filter (function (d) {
+                        return !d.children && d.name.split ("|").length == 1;
+                    });
+
+
+                    if (root_on.length == 1) {
+                        tree.reroot (root_on[0]);
+                        tree.delete_a_node (root_on[0]);
+                    }
+
+
+
+                    unique_dates = {};
+                    generate_unique_dates(tree.get_nodes()[0]);
+
+                    _.each(unique_dates, function(value, key) {
+                        var sorted_dates = _.sortBy(_.keys(value)),
+                            sorted_dates_as_dict = {};
+
+                        _.each(sorted_dates, function(e, i) {
+                            sorted_dates_as_dict[e] = i;
+                        });
+
+
+                        unique_dates[key] = sorted_dates_as_dict;
+                    });
+
+                    if (!label_on_compartment) {
+                        var stable_colors = {};
+                        _.each(tree.get_nodes(), function(d) {
+                            if (!d.children || d.children.length == 0) {
+                                stable_colors[d.name.split("|")[0]] = true;
+                            }
+                        });
+
+                        node_color.domain(_.sortBy(_.keys(stable_colors)));
+                    } else {
+                        var _maxtp = _.reduce(unique_dates, function(memo, value) {
+                            return Math.max(_.keys(value).length, memo);
+                        }, 0);
+                        var color_domain = ['Pre-ART'];
+                        for (k = 1; k <= _maxtp; k++) {
+                            color_domain.push("TP " + k);
+                        }
+                        node_color.domain(color_domain);
+
+                        // find CSF-only clades
+                        
+                        clade_roots = {};
+
+                        function look_for_clades (node, label) {
+                            node.clade = null;
+
+                            if (node.children && node.children.length > 0) {
+                                var my_weight = _.reduce (node.children, function (memo,d) {
+                                    var current_clade_weight = look_for_clades (d, label);
+                                    if (memo[0] >= 0) {
+                                        if (current_clade_weight[0] > 0) {
+                                            var merged = memo[2];
+                                            _.each (current_clade_weight[2], function (value, key) {
+                                                if (key in merged) {
+                                                    merged[key] += value;
+                                                } else {
+                                                    merged[key] = value;
+                                                }
+                                            });
+                                            return [memo[0] + current_clade_weight[0], memo[1] + current_clade_weight[1], merged] ;
+                                        }
+                                    }
+                                    return [-1,0, {}];
+                                },[0,0,{}]);
+
+
+
+                                if (my_weight[0] >= 5 && my_weight[1] > 3 && parseFloat (node.name) >= 0.9) {
+                                    node.clade = my_weight;
+                                }
+
+                                return my_weight;
+
+                            } else {
+                                var bits = node.name.split ("|");
+                                if (bits[2] == label) {
+                                    var weight = parseFloat (bits[6]),
+                                        d = {};
+                                        d[branch_name(node)] =  weight;
+                                    return [weight,1, d];
+                                }
+                                return [-1,1, {}];
+                            }
+                        }
+
+                        function unmark (node) {
+                            delete node ["clade"];
+                             if (node.children && node.children.length > 0) {
+                                _.each (node.children, unmark);
+                             }
+                        }
+
+                        function report_clades (node) {
+                          if (node.children && node.children.length > 0) {
+                            if (node.clade) {
+                                console.log (node.name, node.clade);
+                                unmark (node);
+                                node["clade"] = true;
+                                //tree.modify_selection ([node]);
+                            } else {
+                                _.each (node.children, function (d) {
+                                    report_clades (d);
+                                });
+                            }
+                          }
+                        }
+
+                        look_for_clades (tree.get_nodes()[0],"CSF");
+                        report_clades (tree.get_nodes()[0]);
+                        
+                    }
+
+                    generate_node_colors(tree.get_nodes()[0]);
+
+                    /*var test_node = _.filter(tree.get_nodes(), function(d) {
+                        return d.name.indexOf('CA149|20020502|CSF|1|') == 0;
+                    });
+
+                    if (test_node.length == 1) {
+                        test_node = test_node[0];
+                        while (test_node.parent && test_node.parent.node_color == test_node.node_color) {
+                            test_node = test_node.parent;
+                        }
+
+                        if (test_node) {
+                            tree.reroot(test_node);
+                        }
+                    }*/
+
+                    tree.svg(svg).layout();
+                    last_tree = [url, bubbles, skip_tip_names];
+
+                }
+            });
+        }
+
+        $('.tree-example').on('click', function(e) {
+            load_from_url((use_all_compartments ? "trees-full/" : "trees/")  + $(this).data('tree'), $(this).data('clones'));
+        });
+
+        $('#newick_export_modal').on('show.bs.modal', function(e) {
+            $('textarea[id$="nwk_export_spec"]').val(
+                tree.get_newick(
+                    function(node) {
+                        var tags = [];
+                        selection_set.forEach(function(d) {
+                            if (node[d]) {
+                                tags.push(d)
+                            };
+                        });
+                        if (tags.length) {
+                            return "{" + tags.join(",") + "}";
+                        }
+                        return "";
+                    }
+                )
+            );
+        })
+
+        $("#newick_file").on("change", function(e) {
+            var files = e.target.files; // FileList object
+
+            if (files.length == 1) {
+                var f = files[0];
+                var reader = new FileReader();
+
+                reader.onload = (function(theFile) {
+                    return function(e) {
+                        var res = d3_phylotree_newick_parser(e.target.result);
+
+                        if (res["json"]) {
+                            if (!("children" in res["json"])) {
+                                res["error"] = "Empty tree";
+                            }
+                        }
+
+                        var warning_div = d3.select("#main_display").insert("div", ":first-child");
+                        if (res["error"]) {
+                            warning_div.attr("class", "alert alert-danger alert-dismissable")
+                                .html("<strong>Newick parser error for file " + f.name + ": </strong> In file " + res["error"]);
+
+                        } else {
+                            default_tree_settings();
+                            tree(res).svg(svg).layout();
+                            warning_div.attr("class", "alert alert-success alert-dismissable")
+                                .html("Loaded a tree from  file <strong>" + f.name + ": </strong>");
+                        }
+                        warning_div.append("button")
+                            .attr("type", "button")
+                            .attr("class", "close")
+                            .attr("data-dismiss", "alert")
+                            .attr("aria-hidden", "true")
+                            .html("&times;");
+                    };
+                })(f);
+
+                reader.readAsText(f);
+            }
+        });
+
+
+        var label_on_compartment = 0,
+            ignore_bubbles = false,
+            no_tip_labels  = false,
+            use_all_compartments = 0;
+
+
+
+        $("[data-direction]").on("click", function(e) {
+            var which_function = $(this).data("direction") == 'vertical' ? tree.spacing_x : tree.spacing_y;
+            which_function(which_function() + (+$(this).data("amount"))).update();
+        });
+
+        $("#do_not_draw_bubbles").on("change", function(e) {
+            if (ignore_bubbles != $(this).is(':checked')) {
+                ignore_bubbles = !ignore_bubbles;
+                if (last_tree) {
+                    if (last_tree[1] == true) {
+                        load_from_url(last_tree[0], true, no_tip_labels);
+                    }
+                }
+            }
+        });
+
+        $("#do_not_label_tips").on("change", function(e) {
+            if (no_tip_labels != $(this).is(':checked')) {
+                no_tip_labels = !no_tip_labels;
+                if (last_tree) {
+                    load_from_url(last_tree[0], last_tree[1], no_tip_labels);
+                }
+            }
+        });
+
+
+        $(".phylotree-layout-mode").on("change", function(e) {
+            if ($(this).is(':checked')) {
+                if (tree.radial($(this).data("mode") == "radial")) {
+                    tree.placenodes().update();
+                }
+            }
+        });
+
+        $(".phylotree-align-toggler").on("change", function(e) {
+            if ($(this).is(':checked')) {
+                if (tree.align_tips($(this).data("align") == "right")) {
+                    tree.placenodes().update();
+                }
+            }
+        });
+
+
+
+
+        $("#institution_label").on("click", function(e) {
+            label_on_compartment = 1 - label_on_compartment;
+            d3.select("#institution_label").text(label_on_compartment ? "Color based on ID" : "Color based on DATE");
+            generate_node_colors(tree.get_nodes()[0]);
+            d3_phylotree_trigger_refresh(tree);
+        });
+
+        $("#tree_set").on("click", function(e) {
+            use_all_compartments = 1 - use_all_compartments;
+            d3.select("#tree_set").text(use_all_compartments ? "Show trees with only RNA isolates" : "Show trees with DNA isolates");
+         });
+
+        function sort_nodes(asc) {
+            tree.traverse_and_compute(function(n) {
+                var d = 1;
+                if (n.children && n.children.length) {
+                    d += d3.max(n.children, function(d) {
+                        return d["count_depth"];
+                    });
+                }
+                n["count_depth"] = d;
+            });
+            tree.resort_children(function(a, b) {
+                return (a["count_depth"] - b["count_depth"]) * (asc ? 1 : -1);
+            });
+        }
+
+        $("#sort_original").on("click", function(e) {
+            tree.resort_children(function(a, b) {
+                return a["original_child_order"] - b["original_child_order"];
+            });
+        });
+
+        $("#sort_ascending").on("click", function(e) {
+            sort_nodes(true);
+        });
+
+        $("#sort_descending").on("click", function(e) {
+            sort_nodes(false);
+        });
+
+        var available_trees = {
+            "Consensus [env]": ['consensus.env.tre', false],
+            "Consensus [RT]": ['consensus.rt.tre', false],
+            "Consensus [gag]": ['consensus.gag.tre', false],
+            "Consensus-10 [env]": ['consensus-10.env.tre', false],
+            "Consensus-10 [RT]": ['consensus-10.rt.tre', false],
+            "Consensus-10 [gag]": ['consensus-10.gag.tre', false],
+            "All, top 3 haplotypes [env]": ['consensus-3.env.tre', false],
+            "All, top 3 haplotypes [RT]": ['consensus-3.rt.tre', false],
+            "All, top 3 haplotypes [gag]": ['consensus-3.gag.tre', false],
+            "23350 env (Top 3 haplotypes)": ["23350.env.tre", true],
+            "23350 rt (Top 3 haplotypes)": ["23350.rt.tre", true],
+            "23350 gag (Top 3 haplotypes)": ["23350.gag.tre", true],
+            "24232 env (Top 3 haplotypes)": ["24232.env.tre", true],
+            "24232 rt (Top 3 haplotypes)": ["24232.rt.tre", true],
+            "24232 gag (Top 3 haplotypes)": ["24232.gag.tre", true],
+            "24273 env (Top 3 haplotypes)": ["24273.env.tre", true],
+            "24273 rt (Top 3 haplotypes)": ["24273.rt.tre", true],
+            "24273 gag (Top 3 haplotypes)": ["24273.gag.tre", true],
+            "24409 env (Top 3 haplotypes)": ["24409.env.tre", true],
+            "24409 rt (Top 3 haplotypes)": ["24409.rt.tre", true],
+            "24409 gag (Top 3 haplotypes)": ["24409.gag.tre", true],
+            "25839 env (Top 3 haplotypes)": ["25839.env.tre", true],
+            "25839 rt (Top 3 haplotypes)": ["25839.rt.tre", true],
+            "25839 gag (Top 3 haplotypes)": ["25839.gag.tre", true],
+            "26618 env (Top 3 haplotypes)": ["26618.env.tre", true],
+            "26618 rt (Top 3 haplotypes)": ["26618.rt.tre", true],
+            "26618 gag (Top 3 haplotypes)": ["26618.gag.tre", true],
+            "26742 env (Top 3 haplotypes)": ["26742.env.tre", true],
+            "26742 rt (Top 3 haplotypes)": ["26742.rt.tre", true],
+            "26742 gag (Top 3 haplotypes)": ["26742.gag.tre", true],
+            "26919 env (Top 3 haplotypes)": ["26919.env.tre", true],
+            "26919 rt (Top 3 haplotypes)": ["26919.rt.tre", true],
+            "26919 gag (Top 3 haplotypes)": ["26919.gag.tre", true],
+            "34535 env (Top 3 haplotypes)": ["34535.env.tre", true],
+            "34535 rt (Top 3 haplotypes)": ["34535.rt.tre", true],
+            "34535 gag (Top 3 haplotypes)": ["34535.gag.tre", true],
+            "58213 env (Top 3 haplotypes)": ["58213.env.tre", true],
+            "58213 rt (Top 3 haplotypes)": ["58213.rt.tre", true],
+            "58213 gag (Top 3 haplotypes)": ["58213.gag.tre", true],
+            "58704 env (Top 3 haplotypes)": ["58704.env.tre", true],
+            "58704 rt (Top 3 haplotypes)": ["58704.rt.tre", true],
+            "58704 gag (Top 3 haplotypes)": ["58704.gag.tre", true],
+            "58786 env (Top 3 haplotypes)": ["58786.env.tre", true],
+            "58786 rt (Top 3 haplotypes)": ["58786.rt.tre", true],
+            "58786 gag (Top 3 haplotypes)": ["58786.gag.tre", true],
+            "CA149 env (Top 3 haplotypes)": ["CA149.env.tre", true],
+            "CA149 rt (Top 3 haplotypes)": ["CA149.rt.tre", true],
+            "CA149 gag (Top 3 haplotypes)": ["CA149.gag.tre", true],
+            "NM487 env (Top 3 haplotypes)": ["NM487.env.tre", true],
+            "NM487 rt (Top 3 haplotypes)": ["NM487.rt.tre", true],
+            "NM487 gag (Top 3 haplotypes)": ["NM487.gag.tre", true],
+            "23350 env (Up to 25 haplotypes/unit)": ["23350.env.deep.tre", true],
+            "23350 rt (Up to 25 haplotypes/unit)": ["23350.rt.deep.tre", true],
+            "23350 gag (Up to 25 haplotypes/unit)": ["23350.gag.deep.tre", true],
+            "24232 env (Up to 25 haplotypes/unit)": ["24232.env.deep.tre", true],
+            "24232 rt (Up to 25 haplotypes/unit)": ["24232.rt.deep.tre", true],
+            "24232 gag (Up to 25 haplotypes/unit)": ["24232.gag.deep.tre", true],
+            "24273 env (Up to 25 haplotypes/unit)": ["24273.env.deep.tre", true],
+            "24273 rt (Up to 25 haplotypes/unit)": ["24273.rt.deep.tre", true],
+            "24273 gag (Up to 25 haplotypes/unit)": ["24273.gag.deep.tre", true],
+            "24409 env (Up to 25 haplotypes/unit)": ["24409.env.deep.tre", true],
+            "24409 rt (Up to 25 haplotypes/unit)": ["24409.rt.deep.tre", true],
+            "24409 gag (Up to 25 haplotypes/unit)": ["24409.gag.deep.tre", true],
+            "25839 env (Up to 25 haplotypes/unit)": ["25839.env.deep.tre", true],
+            "25839 rt (Up to 25 haplotypes/unit)": ["25839.rt.deep.tre", true],
+            "25839 gag (Up to 25 haplotypes/unit)": ["25839.gag.deep.tre", true],
+            "26618 env (Up to 25 haplotypes/unit)": ["26618.env.deep.tre", true],
+            "26618 rt (Up to 25 haplotypes/unit)": ["26618.rt.deep.tre", true],
+            "26618 gag (Up to 25 haplotypes/unit)": ["26618.gag.deep.tre", true],
+            "26742 env (Up to 25 haplotypes/unit)": ["26742.env.deep.tre", true],
+            "26742 rt (Up to 25 haplotypes/unit)": ["26742.rt.deep.tre", true],
+            "26742 gag (Up to 25 haplotypes/unit)": ["26742.gag.deep.tre", true],
+            "26919 env (Up to 25 haplotypes/unit)": ["26919.env.deep.tre", true],
+            "26919 rt (Up to 25 haplotypes/unit)": ["26919.rt.deep.tre", true],
+            "26919 gag (Up to 25 haplotypes/unit)": ["26919.gag.deep.tre", true],
+            "34535 env (Up to 25 haplotypes/unit)": ["34535.env.deep.tre", true],
+            "34535 rt (Up to 25 haplotypes/unit)": ["34535.rt.deep.tre", true],
+            "34535 gag (Up to 25 haplotypes/unit)": ["34535.gag.deep.tre", true],
+            "58213 env (Up to 25 haplotypes/unit)": ["58213.env.deep.tre", true],
+            "58213 rt (Up to 25 haplotypes/unit)": ["58213.rt.deep.tre", true],
+            "58213 gag (Up to 25 haplotypes/unit)": ["58213.gag.deep.tre", true],
+            "58704 env (Up to 25 haplotypes/unit)": ["58704.env.deep.tre", true],
+            "58704 rt (Up to 25 haplotypes/unit)": ["58704.rt.deep.tre", true],
+            "58704 gag (Up to 25 haplotypes/unit)": ["58704.gag.deep.tre", true],
+            "58786 env (Up to 25 haplotypes/unit)": ["58786.env.deep.tre", true],
+            "58786 rt (Up to 25 haplotypes/unit)": ["58786.rt.deep.tre", true],
+            "58786 gag (Up to 25 haplotypes/unit)": ["58786.gag.deep.tre", true],
+            "CA149 env (Up to 25 haplotypes/unit)": ["CA149.env.deep.tre", true],
+            "CA149 rt (Up to 25 haplotypes/unit)": ["CA149.rt.deep.tre", true],
+            "CA149 gag (Up to 25 haplotypes/unit)": ["CA149.gag.deep.tre", true],
+            "NM487 env (Up to 25 haplotypes/unit)": ["NM487.env.deep.tre", true],
+            "NM487 rt (Up to 25 haplotypes/unit)": ["NM487.rt.deep.tre", true],
+            "NM487 gag (Up to 25 haplotypes/unit)": ["NM487.gag.deep.tre", true],
+        };
+
+        $(function() {
+
+            $("#trees").autocomplete({
+                source: _.keys(available_trees),
+                close: function(e) {
+                    change_tree(this);
+                }
+            });
+        });
+
+
+        function change_tree(element) {
+            var tree_value = $(element).val();
+            if (tree_value in available_trees) {
+                load_from_url((use_all_compartments ? "trees-full/" : "trees/") + available_trees[tree_value][0], available_trees[tree_value][1]);
+            }
+        }
+
+        $("#trees").on("input", function(e) {
+            change_tree(this);
+        });
+
+        //    phylotree.modify_selection = function (callback, attr, place, skip_refresh, mode) {
+
+
+        $("#branch_filter").on("input propertychange", function(e) {
+            var filter_value = $(this).val();
+
+            var rx = new RegExp(filter_value, "i");
+
+            tree.modify_selection(function(n) {
+                return filter_value.length && (tree.branch_name()(n.target).search(rx)) != -1;
+            }, "tag");
+
+        });
+
+        $("#validate_newick").on("click", function(e) {
+            var res = d3_phylotree_newick_parser($('textarea[id$="nwk_spec"]').val());
+            if (res["error"] || !res["json"]) {
+                var warning_div = d3.select("#newick_body").selectAll("div  .alert-danger").data([res["error"]])
+                warning_div.enter().append("div");
+                warning_div.html(function(d) {
+                    return d;
+                }).attr("class", "alert-danger");
+
+            } else {
+                default_tree_settings();
+                tree(res).svg(svg).layout();
+                $('#newick_modal').modal('hide');
+            }
+        });
+
+        var node_color;
+
+        function default_tree_settings(bubbles, skip_tip_names) {
+
+            tree.node_circle_size(0);
+            tree.branch_length(null);
+            tree.branch_name(null);
+            tree.node_span('equal');
+            tree.options({
+                'draw-size-bubbles': bubbles && !ignore_bubbles,
+                'annular-limit' : 0.5,
+                'max-radius': 512
+            }, false);
+            tree.style_nodes(node_colorizer)
+                .style_edges(edge_colorizer)
+                .branch_name(skip_tip_names ? function () {return ""; } : branch_name);
+            //tree.radial (tree.radial())
+            tree.align_tips(!skip_tip_names);
+
+            if (bubbles) {
+                if (!ignore_bubbles) {
+                    tree.node_span(bubble_size);
+                }
+                if (label_on_compartment == 0) {
+                    $("#institution_label").click();
+                }
+            } else {
+                if (label_on_compartment == 1) {
+                    $("#institution_label").click();
+                }
+            }
+
+            node_color = label_on_compartment ? d3.scale.category10() : d3.scale.category20();
+        }
+
+
+
+        function branch_name(data) {
+            //console.log ("branch_name", data);
+            bits = data.name.split('|');
+            if (bits.length >= 6 && unique_dates) {
+                //return bits[0] + " (" + bits[2] + ")" + " " + date_out(date_in.parse(bits[1]));
+                //console.log (unique_dates);
+                var tp = unique_dates[bits[0]][bits[1]],
+                    node_tag;
+
+                if (bits[0] in haz_preART) {
+                    if (tp == 0) {
+                        node_tag = bits[0] + " Pre-ART";
+                    } else {
+                        node_tag = bits[0] + " TP " + (tp);
+                    }
+                } else {
+                    node_tag = bits[0] + " TP " + (tp + 1);
+                }
+                return node_tag + " (" + bits[2] + ")";
+            }
+            return data.name;
+        }
+
+        function bubble_size(data) {
+            bits = data.name.split('|');
+            if (bits.length > 6) {
+                return 1 + Math.log(parseFloat(bits[6])) / Math.log(10);
+            }
+            return 1;
+        }
+
+        function extract_node_key(data) {
+            bits = data.name.split('|');
+            if (bits.length >= 6) {
+                var tp = unique_dates[bits[0]][bits[1]];
+                if (label_on_compartment) {
+                    if (bits[0] in haz_preART) {
+                        if (tp == 0) {
+                            return "Pre-ART";
+                        } else {
+                            return "TP " + (tp);
+                        }
+                    } else {
+                        return "TP " + (tp + 1);
+                    }
+                }
+                return bits[0];
+            }
+            return null;
+        }
+
+
+        function node_compartment(node) {
+            return node.name.split('|')[2];
+        }
+
+        var compartment_labels = d3.scale.ordinal().range(["circle", "square", "diamond", "triangle-down", "triangle-up"]).domain (["BP","CSF"]);
+
+        function node_colorizer(element, data) {
+            try {
+
+                color_me = null;
+                if ("" + data["node_color"] != "null") {
+                    color_me = data.node_color;
+                }
+
+
+
+                if (label_on_compartment && d3_phylotree_is_leafnode(data) || data["clade"]) {
+                     var existing_circle = element.selectAll("circle");
+                     if (existing_circle.size() == 1) {
+                         existing_circle.remove();
+                     }
+                     existing_circle = element.selectAll("path.node_shape").data([node_compartment(data)]);
+                     existing_circle.enter().append("path").classed("node_shape", true);
+
+                     var bubble_size = data["clade"] ? 20 : tree.node_bubble_size(data);
+
+                     existing_circle.attr("d", function(d) {
+                         return d3.svg.symbol().type(data["clade"] ? "cross" : compartment_labels(d)).size(bubble_size * bubble_size)();
+                     });
+
+
+                     if (data["clade"]) {
+                         existing_circle.style("fill", "black");
+                     } else {
+                         existing_circle.style("opacity", "0.5").style("stroke-width", "1px").style("stroke", "black");
+                         if (data.text_angle) {
+                             existing_circle.attr("transform", function(d) {
+                                 return "rotate(" + data.text_angle + ") translate(" + (data.text_align == "end" ? -1 : 1) * bubble_size / 2 + ",0)";
+                             });
+                         } else {
+                             existing_circle.attr("transform", function(d) {
+                                 return "translate(" + bubble_size / 2 + ",0)";
+                             });
+                         }
+                     }
+
+                 }
+                
+                if (! data["clade"]) {
+                    element.selectAll("circle").style("fill", color_me);
+                    element.selectAll("path").style("fill", color_me);
+                    element.style("fill", color_me);
+                }
+
+            } catch (e) {
+                console.log(e);
+            }
+
+        }
+
+        function edge_colorizer(element, data) {
+            //console.log (data[current_selection_name]);
+            try {
+
+                if (data.target.children) {
+                    var support = parseFloat(data.target.name);
+                    if (support >= 0.9) {
+                        element.style("stroke-width", "5px");
+                    }
+                }
+                color_me = null;
+                if ("" + data.target["node_color"] != "null") {
+                    color_me = data.target.node_color;
+                }
+                element.style("stroke", color_me);
+            } catch (e) {}
+
+        }
+
+        var width  = 800, //$(container_id).width(),
+            height = 600, //$(container_id).height()
+            selection_set = ['Foreground'],
+            current_selection_name = $("#selection_name_box").val(),
+            current_selection_id = 0,
+            max_selections = 10;
+        color_scheme = d3.scale.category10(),
+            selection_menu_element_action = "phylotree_menu_element_action";
+
+        var tree = d3.layout.phylotree("body")
+            .size([height, width])
+            .separation(function(a, b) {
+                return 0;
+            })
+            .count_handler(function(count) {
+                $("#selected_filtered_counter").text(count.tag);
+            });
+        //.node_span (function (a) {if (a.children && a.children.length) return 1; return isNaN (parseFloat (a["attribute"]) * 100) ? 1 : parseFloat (a["attribute"]) * 100; });
+
+        var container_id = '#tree_container';
+
+        //window.setInterval (function () {});
+
+        var svg = d3.select(container_id).append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+
+
+        $(document).ready(function() {
+            load_from_url((use_all_compartments ? "trees-full/" : "trees/") + "consensus.env.tre");
+        });
+    </script>
+
+</body>
+
+</html>

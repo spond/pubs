@@ -1,0 +1,182 @@
+{
+ "120-330": {
+  "BranchLength": {
+   "NS": 0, 
+   "S": 0
+  }, 
+  "Diversity": {
+   "NS": 0, 
+   "S": 0
+  }, 
+  "Tree": "", 
+  "omega": 0
+ }, 
+ "150-360": {
+  "BranchLength": {
+   "NS": 0, 
+   "S": 0
+  }, 
+  "Diversity": {
+   "NS": 0, 
+   "S": 0
+  }, 
+  "Tree": "", 
+  "omega": 0
+ }, 
+ "180-390": {
+  "BranchLength": {
+   "NS": 0, 
+   "S": 0
+  }, 
+  "Diversity": {
+   "NS": 0, 
+   "S": 0
+  }, 
+  "Tree": "", 
+  "omega": 0
+ }, 
+ "180-657": {
+  "BranchLength": {
+   "NS": 0, 
+   "S": 0.0008164484518907324
+  }, 
+  "Diversity": {
+   "NS": 0, 
+   "S": 0.0004629714038605045
+  }, 
+  "Tree": {
+   "Combined": "(((((cluster_0_4525:0,cluster_2_15:0)Node4:0,cluster_3_15:0)Node3:0,cluster_6_13:0)Node2:0.002242006359625075,cluster_10_85:0.002245558002601258)Node1:0,cluster_12_107:0.004493368608571723,cluster_15_17:0)", 
+   "NS": "(((((cluster_0_4525:0,cluster_2_15:0)Node4:0,cluster_3_15:0)Node3:0,cluster_6_13:0)Node2:0,cluster_10_85:0)Node1:0,cluster_12_107:0,cluster_15_17:0)", 
+   "S": "(((((cluster_0_4525:0,cluster_2_15:0)Node4:0,cluster_3_15:0)Node3:0,cluster_6_13:0)Node2:0.002242006359625075,cluster_10_85:0.002245558002601258)Node1:0,cluster_12_107:0.004493368608571723,cluster_15_17:0)"
+  }, 
+  "omega": 0
+ }, 
+ "210-420": {
+  "BranchLength": {
+   "NS": 0, 
+   "S": 0.005714444066781292
+  }, 
+  "Diversity": {
+   "NS": 0, 
+   "S": 0
+  }, 
+  "Tree": {
+   "Combined": "(cluster_1_69:0.005714444066781292)", 
+   "NS": "(cluster_1_69:0)", 
+   "S": "(cluster_1_69:0.005714444066781292)"
+  }, 
+  "omega": 0
+ }, 
+ "240-450": {
+  "BranchLength": {
+   "NS": 0, 
+   "S": 0
+  }, 
+  "Diversity": {
+   "NS": 0, 
+   "S": 0
+  }, 
+  "Tree": "", 
+  "omega": 0
+ }, 
+ "270-480": {
+  "BranchLength": {
+   "NS": 0, 
+   "S": 0
+  }, 
+  "Diversity": {
+   "NS": 0, 
+   "S": 0
+  }, 
+  "Tree": "", 
+  "omega": 0
+ }, 
+ "300-510": {
+  "BranchLength": {
+   "NS": 0, 
+   "S": 0
+  }, 
+  "Diversity": {
+   "NS": 0, 
+   "S": 0
+  }, 
+  "Tree": "", 
+  "omega": 0
+ }, 
+ "330-540": {
+  "BranchLength": {
+   "NS": 0, 
+   "S": 0
+  }, 
+  "Diversity": {
+   "NS": 0, 
+   "S": 0
+  }, 
+  "Tree": "", 
+  "omega": 0
+ }, 
+ "360-570": {
+  "BranchLength": {
+   "NS": 0, 
+   "S": 0.005387637459050798
+  }, 
+  "Diversity": {
+   "NS": 0, 
+   "S": 0
+  }, 
+  "Tree": {
+   "Combined": "(cluster_2_84:0.005387637459050798)", 
+   "NS": "(cluster_2_84:0)", 
+   "S": "(cluster_2_84:0.005387637459050798)"
+  }, 
+  "omega": 0
+ }, 
+ "390-600": {
+  "BranchLength": {
+   "NS": 0, 
+   "S": 0.005591692054242839
+  }, 
+  "Diversity": {
+   "NS": 0, 
+   "S": 0
+  }, 
+  "Tree": {
+   "Combined": "(cluster_2_59:0.005591692054242839)", 
+   "NS": "(cluster_2_59:0)", 
+   "S": "(cluster_2_59:0.005591692054242839)"
+  }, 
+  "omega": 0
+ }, 
+ "420-630": {
+  "BranchLength": {
+   "NS": 0, 
+   "S": 0.005262534768201436
+  }, 
+  "Diversity": {
+   "NS": 0, 
+   "S": 0
+  }, 
+  "Tree": {
+   "Combined": "(cluster_2_76:0.005262534768201436)", 
+   "NS": "(cluster_2_76:0)", 
+   "S": "(cluster_2_76:0.005262534768201436)"
+  }, 
+  "omega": 0
+ }, 
+ "450-660": {
+  "BranchLength": {
+   "NS": 0, 
+   "S": 0.005643173349864508
+  }, 
+  "Diversity": {
+   "NS": 0, 
+   "S": 0
+  }, 
+  "Tree": {
+   "Combined": "(cluster_2_65:0.005643173349864508)", 
+   "NS": "(cluster_2_65:0)", 
+   "S": "(cluster_2_65:0.005643173349864508)"
+  }, 
+  "omega": 0
+ }
+}

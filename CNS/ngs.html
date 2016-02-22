@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>
+    Eradication R01 NGS data portal
+</title>
+<meta charset="utf-8">
+<!-- Latest compiled and minified CSS -->
+<script src="http://code.jquery.com/jquery.js"></script>
+<link href="//veg.github.io/phylotree.js/phylotree.css" rel="stylesheet">
+<link rel="stylesheet" href="//spond.github.io/layout-phylotree/css/ngs_analysis.css"/>
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-theme.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+
+
+<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+
+<script src="//d3js.org/d3.v3.min.js"></script>
+<script src="//spond.github.io/layout-phylotree/js/ngs_analysis.js"></script>
+<script src="//veg.github.io/phylotree.js/phylotree.js"></script>
+<script src="//veg.github.io/phylotree.js/phylotree.js"></script>
+
+</head>
+
+
+
+<body style='padding-top: 70px;'>
+
+    <div class="progress progress-striped active" id="loading_bar">
+        <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+            Loading NGS data
+        </div>
+    </div>
+
+
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation" id='nav_bar' style='display: none'>
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <a class="navbar-brand" id='document_title' href="#">NGS</a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-left" id="dram_info_tab">
+                    <li><a href="#" id='view_overall_stats'>Summary statistics</a> </li>
+                    <li><a href="#" id='view_individual_runs'>Individual runs</a> </li>
+                    <li><a href="#" id='view_intrahost' class='alert-info'>Intrahost evolution</a></li>
+                </ul>
+
+                <form class="navbar-form navbar-right" role="search">
+                    <div class="form-group">
+                        <input type="text" width='40' class="form-control" placeholder="Type text to match" id='summary_limiter'>
+                    </div>
+                </form>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="#" class="navbar-link">Found <span class="badge" id = 'summary_matching'>42</span> records</a>
+                    </li>
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Exports <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#" id='export_current_table'>Export currently displayed table to tab-delimited data</a> </li>
+                            <li><a href="#" id='export_consensus_sequences'>Export visible consensus sequences to FASTA</a></li>
+                        </ul>
+                    </li>
+                </ul>
+
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
+
+    <div class='container' id='overall_table' style='display: none'>
+        
+        <div class='row' style='display: none' id='run_metric_histogram_div'>
+            <button type="button" class="close" aria-hidden="true" id='close_run_metric_histogram'>&times;</button>
+        </div>
+        
+        <div class='row'>
+            <h5>Run-level metrics</h5>
+            <div class='col-lg-12'>
+                <table class='table table-striped table-hover'>
+                    <thead id='intrument_metrics_table_head'>
+                        <tr>
+                        </tr>
+                    </thead>
+                    <tbody id='intrument_metrics_table_body'>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class='row'>
+            <h5>Amplicon-level metrics</h5>
+            <div class='col-lg-12'>
+                <table class='table table-striped table-hover'>
+                    <thead id='run_metrics_table_head'>
+                        <tr>
+                        </tr>
+                    </thead>
+                    <tbody id='run_metrics_table_body'>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class='container' id='summary_table' style='display: none'>
+        <div class='row'>
+            <div class='col-lg-12'>
+                <table class='table table-striped table-hover'>
+                    <thead id='summary_table_head'>
+                        <tr>
+                        </tr>
+                    </thead>
+                    <tbody id='summary_table_body'>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class='container' id='dram_summary_table' style='display: none'>
+
+        <div class="progress progress-striped active" id="loading_dram_bar">
+            <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                Loading DRAM data
+            </div>
+        </div>
+
+        <div class='row'>
+            <div class='col-lg-12'>
+                <div class="input-group ">
+                    <span class="input-group-addon">
+                            Show DRAMs with at least this frequency
+                      </span>
+                    <input type="text" id='dram_freq_summary' class="form-control" value="0" />
+                    <span class="input-group-addon">
+                           %
+                      </span>
+                    <span class="input-group-btn">
+                        <button class="btn btn-primary disabled" type="button" id = 'dram_button_summary'>Filter</button>
+                      </span>
+                </div>
+            </div>
+        </div>
+        <div class='row'>
+            <div class='col-lg-12'>
+                <table class='table table-striped table-hover'>
+                    <thead id='dram_table_head'>
+                    </thead>
+                    <tbody id='dram_table_body'>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class='container' id='intrahost_table' style='display: block'>
+        <div class='row' style='display: none' id='bubble_plot_div'>
+            <button type="button" class="close" aria-hidden="true" id='close_bubble_plot'>&times;</button>
+            <svg id='bubble_plot' width='1px' height='1px' />
+        </div>
+
+        <div class='row' style='display: none' id='tn93_histogram_div'>
+            <button type="button" class="close" aria-hidden="true" id='close_tn93_histogram'>&times;</button>
+        </div>
+
+        <div class='row' id='intrahost_table_div'>
+            <div class='col-md-12'>
+                <table class='table table-striped table-hover'>
+                    <thead id='intrahost_table_head'>
+                        <tr>
+                        </tr>
+                    </thead>
+                    <tbody id='intrahost_table_body'>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class='container' id='compartmentalization_table' style='display: none'>
+
+        <div class="alert alert-info alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            Compartmentalization plots use the following display conventions.
+            <br>
+            <strong>Shape</strong>: circle (F<sub>ST</sub> &ge; 0), cross (F<sub>ST</sub> &lt; 0)
+            <br>
+            <strong>Color</strong>: blue (high p-value), red (low p-value)
+            <br>
+            <strong>Opacity</strong>: transparent (p &gt; 0.05), solid (p &lt; 0.05)
+            <br>
+        </div>
+
+        <div class='row' style='display: none' id='compartment_plot_div'>
+            <button type="button" class="close" aria-hidden="true" id='close_compartment_plot'>&times;</button>
+        </div>
+
+        <div class='row' id='compartmentalization_table_div'>
+            <div class='col-md-12'>
+                <table class='table table-striped table-hover'>
+                    <tbody id='compartmentalization_table_body'>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <div class='container' id='allofit' style='display: none'>
+        <p class="lead" id='header'>
+            Sequencing results for <span id='analysis_id'>None</span>.
+        </p>
+
+        <div class="pull-right">
+            <button type="button" id="back_to_summary" class="btn btn-primary">Back to summary</button>
+        </div>
+
+        <ul class="nav nav-tabs">
+            <li><a href="#overview" data-toggle="tab">Overview</a></li>
+            <li><a href="#graphs" data-toggle="tab">Diversity</a></li>
+            <li><a href="#position" data-toggle="tab">By position</a></li>
+            <li><a href="#rate_profile" data-toggle="tab">Rate profiles</a></li>
+            <li><a href="#consensus" data-toggle="tab">Consensus</a></li>
+        </ul>
+
+        <div id="myTabContent" class="tab-content">
+            <div class="tab-pane fade in active" id="overview">
+                <div class='row'>
+                    <div class='col-md-4'>
+                        <div class='row'>
+                            <h4> Analysis summary </h4>
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <span class="badge" id="summary_region_spanned">0</span> Reference region spanned (aa)
+                                </li>
+                                <li class="list-group-item">
+                                    <span class="badge" id="summary_coverage">0</span> Median coverage (per aa position)
+                                </li>
+                                <li class="list-group-item">
+                                    <span class="badge" id="summary_read_count">0</span> Read (unique 'clone') count
+                                </li>
+                                <li class="list-group-item">
+                                    <span class="badge" id="summary_tn93">0</span> Mean nucleotide diversity, %
+                                </li>
+                                <li class="list-group-item">
+                                    <span class="badge" id="summary_S">0</span> Max. synonymous diversity, %
+                                </li>
+                                <li class="list-group-item">
+                                    <span class="badge" id="summary_NS">0</span> Max. non-synonymous diversity, %
+                                </li>
+                                <!--<li class="list-group-item">
+                            <span class="badge" id = "summary_compartmentalized">0</span>
+                            Compartmentalization
+                          </li>-->
+                            </ul>
+                        </div>
+                        <div class='row' id='dram_box'>
+                            <h4> DRAM information </h4>
+                            <div class="input-group ">
+                                <span class="input-group-addon">
+                                PI <input type="checkbox" id = 'pi_toggle' checked>
+                              </span>
+                                <span class="input-group-addon">
+                                NRTI <input type="checkbox" id = 'nrti_toggle' checked>
+                              </span>
+                                <span class="input-group-addon">
+                                NNRTI <input type="checkbox" id = 'nnrti_toggle' checked>
+                              </span>
+                                <input type="text" id='dram_freq' class="form-control" value="0.01">
+                                <span class="input-group-btn">
+                                <button class="btn btn-primary" type="button" id = 'dram_button'>Filter</button>
+                                </span>
+                            </div>
+                            <!-- /input-group -->
+                            <div class='row'>
+                                <div class="container">
+                                    <table class='table-striped table table-hover'>
+                                        <thead>
+                                            <td>Gene</td>
+                                            <td>Position</td>
+                                            <td>Coverage</td>
+                                            <td>Residues</td>
+                                        </thead>
+                                        <tbody id='positional_table_dram'>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <h4>Amino-acid coverage information</h4>
+                        <svg id='main_plot' />
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="graphs">
+                <div class="row">
+                    <!--<div class = "col-md-7">
+                    <svg id = 'main_plot'/>
+                </div>-->
+                    <div class="col-md-4" id='tn93_plot'>
+                    </div>
+                    <div class="col-md-4" id='diversity_plot_s'>
+                    </div>
+                    <div class="col-md-4" id='diversity_plot_ns'>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12" id='tree_plot'>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="tab-pane fade" id="position">
+                <div class='row'>
+                    <div class='col-md-12'>
+                        <h4> Amino-acid profiles by position </h4>
+                        <table class='table-striped table table-hover'>
+                            <thead>
+                                <td>Gene</td>
+                                <td>Position</td>
+                                <td>Coverage</td>
+                                <td>Residues</td>
+                                <td>Nucleotide rates</td>
+                            </thead>
+                            <tbody id='positional_table'>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="rate_profile">
+                <div class='row'>
+                    <div class='col-md-12'>
+                        <h4> Supported mutational profiles </h4>
+                        <table class='table-striped table table-condensed'>
+                            <thead>
+                                <td>Proportion of sites</td>
+                                <td>A</td>
+                                <td>C</td>
+                                <td>G</td>
+                                <td>T</td>
+                            </thead>
+                            <tbody id='rate_table'>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+            <!--       
+        <div class="tab-pane fade" id="compartmentalization">
+            <div class = "row">
+                <div class = "col-md-12" id = 'fst_plot'>
+                </div>
+            </div>
+        </div>
+        -->
+
+            <div class="tab-pane fade" id="consensus">
+                <blockquote>
+                    <textarea class="form-control" rows="10" id='consensus_text'></textarea>
+                    <small>Consensus sequence (minimum 100 coverage per base)</small>
+                </blockquote>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+
+$(document).ready (function () {
+    load_analysis_results ("results.json", " Eradication R01 NGS data");
+});
+
+</script>
+
+</body>
+</html>
