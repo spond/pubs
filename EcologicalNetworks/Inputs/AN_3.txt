@@ -1,0 +1,4 @@
+(Coleoptera_ni_sp,
+((Bombus_dahlbomii,(Anthidium_sp1,(Megachile_sp5,Megachile_semirufa),Stenoanthidium_espinosai)),
+((Andinus_venustus,((Phulia_nymphula,Hypsochila_wagen,Tatochila_mercedis),((Yramea_mod,Faunula_leu,Cynthia_terpsichore),Pseudolucia_chilensis))),
+(((((Tachinidae,Vibrissomyia_sp),Sarcophagidae),(Scaeva_mel,Habromyia_lipoflava,Syrphidae)),(Bombyliidae_sp1,Villa_spp)),Dasybasis_sp))));

@@ -1,0 +1,7 @@
+(Coleoptera_ni_sp,
+(((((Bombus_dahlbomii,(Alloscirtetica_sp1,Alloscirtetica_rufitarsis),(Centris_nigerrima,Centris_cineraria,Centris_cana))
+,((Anthidium_sp1,Anthidium_funereum),(Megachile_semirufa_2,Mega_sp1,Megachile_sp5,Megachile_sp2,Megachile_sp4,Megachile_semirufa_1))),((Chilicola_sp1,(Colletes_fulvipes,Colletes_sp1)),Panurgidae_sp1),Caenohal_sp1),((Hypodynerus_sp1,Hypodynerus_sp2,Hypodynerus_sp3),Gayella_reedi,Vespidae)),
+((Andinus_ve,((Phulia_nymphula,Tatochila_mercedis,Tatochila_sp),((Yramea_modesta,Etcheverrius_ch,Faunula_leuco,Yramea_lathonoides,Auca_coc),Pseudolucia_chilensis))),
+((((((((Tachinidae_sp1,(Prosopochaeta_caliginosa,Prosopochaeta_sp),Vibrissomyia_sp,Ateloglutus_sp,Spathipalpus_ph),Sarcophagidae_sp1),(Anthomyiidae_sp1,Anthomyiidae_sp2)),(Agromyzidae_sp2,Agromyzidae_sp1)),(Scaeva_mel,Habromyia_lipoflava)),((Villa_verdensis,Villa_spp,Villa_gai,Villa_hypoxantha,Villa_arenari,Villa_flavicura,Villa_semifus),Lycophlaeba_lugu,Bombyliidae_sp1)),(Tabanidae_sp1,Dasybasis_sp1)),Bibionidae_sp1))));
+
+

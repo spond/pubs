@@ -1,0 +1,90 @@
+{
+ "159-552": {
+  "BranchLength": {
+   "NS": 0, 
+   "S": 0.0206788702412334
+  }, 
+  "Diversity": {
+   "NS": 0, 
+   "S": 0
+  }, 
+  "Tree": {
+   "Combined": "(cluster_7_32:0.0206788702412334)", 
+   "NS": "(cluster_7_32:0)", 
+   "S": "(cluster_7_32:0.0206788702412334)"
+  }, 
+  "omega": 0
+ }, 
+ "180-390": {
+  "BranchLength": {
+   "NS": 0, 
+   "S": 0
+  }, 
+  "Diversity": {
+   "NS": 0, 
+   "S": 0
+  }, 
+  "Tree": "", 
+  "omega": 0
+ }, 
+ "210-420": {
+  "BranchLength": {
+   "NS": 0, 
+   "S": 0
+  }, 
+  "Diversity": {
+   "NS": 0, 
+   "S": 0
+  }, 
+  "Tree": "", 
+  "omega": 0
+ }, 
+ "240-450": {
+  "BranchLength": {
+   "NS": 0, 
+   "S": 0
+  }, 
+  "Diversity": {
+   "NS": 0, 
+   "S": 0
+  }, 
+  "Tree": "", 
+  "omega": 0
+ }, 
+ "270-480": {
+  "BranchLength": {
+   "NS": 0, 
+   "S": 0
+  }, 
+  "Diversity": {
+   "NS": 0, 
+   "S": 0
+  }, 
+  "Tree": "", 
+  "omega": 0
+ }, 
+ "300-510": {
+  "BranchLength": {
+   "NS": 0, 
+   "S": 0
+  }, 
+  "Diversity": {
+   "NS": 0, 
+   "S": 0
+  }, 
+  "Tree": "", 
+  "omega": 0
+ }, 
+ "330-540": {
+  "BranchLength": {
+   "NS": 0, 
+   "S": 0
+  }, 
+  "Diversity": {
+   "NS": 0, 
+   "S": 0
+  }, 
+  "Tree": "", 
+  "omega": 0
+ }
+}

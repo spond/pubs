@@ -1,0 +1,122 @@
+{
+ "150-360": {
+  "BranchLength": {
+   "NS": 0, 
+   "S": 0
+  }, 
+  "Diversity": {
+   "NS": 0, 
+   "S": 0
+  }, 
+  "Tree": {
+   "Combined": "(cluster_1_102:0)", 
+   "NS": "(cluster_1_102:0)", 
+   "S": "(cluster_1_102:0)"
+  }, 
+  "omega": 0.9228853344417433
+ }, 
+ "159-552": {
+  "BranchLength": {
+   "NS": 0, 
+   "S": 0.001169258492380269
+  }, 
+  "Diversity": {
+   "NS": 0, 
+   "S": 0.0006263914403762641
+  }, 
+  "Tree": {
+   "Combined": "(((cluster_0_1180:0,cluster_1_18:0.002744104878624318)Node2:0,cluster_2_20:0.00272035228404471)Node1:0.002720352283992853,cluster_4_90:0,cluster_7_40:0)", 
+   "NS": "(((cluster_0_1180:0,cluster_1_18:0)Node2:0,cluster_2_20:0)Node1:0,cluster_4_90:0,cluster_7_40:0)", 
+   "S": "(((cluster_0_1180:0,cluster_1_18:0.002744104878624318)Node2:0,cluster_2_20:0.00272035228404471)Node1:0.002720352283992853,cluster_4_90:0,cluster_7_40:0)"
+  }, 
+  "omega": 0
+ }, 
+ "180-390": {
+  "BranchLength": {
+   "NS": 0, 
+   "S": 0.001669078084193858
+  }, 
+  "Diversity": {
+   "NS": 0, 
+   "S": 0.0004486841228970341
+  }, 
+  "Tree": {
+   "Combined": "(cluster_0_862:0,cluster_2_335:0,cluster_4_59:0.005007234252581574)", 
+   "NS": "(cluster_0_862:0,cluster_2_335:0,cluster_4_59:0)", 
+   "S": "(cluster_0_862:0,cluster_2_335:0,cluster_4_59:0.005007234252581574)"
+  }, 
+  "omega": 0
+ }, 
+ "210-420": {
+  "BranchLength": {
+   "NS": 0, 
+   "S": 0.001689273921059214
+  }, 
+  "Diversity": {
+   "NS": 0, 
+   "S": 0.0005947618118556623
+  }, 
+  "Tree": {
+   "Combined": "(cluster_0_1189:0,cluster_2_82:0.005067821763177643,cluster_4_40:0)", 
+   "NS": "(cluster_0_1189:0,cluster_2_82:0,cluster_4_40:0)", 
+   "S": "(cluster_0_1189:0,cluster_2_82:0.005067821763177643,cluster_4_40:0)"
+  }, 
+  "omega": 0
+ }, 
+ "240-450": {
+  "BranchLength": {
+   "NS": 0, 
+   "S": 0.004784641319806279
+  }, 
+  "Diversity": {
+   "NS": 0, 
+   "S": 0
+  }, 
+  "Tree": {
+   "Combined": "(cluster_4_88:0.004784641319806279)", 
+   "NS": "(cluster_4_88:0)", 
+   "S": "(cluster_4_88:0.004784641319806279)"
+  }, 
+  "omega": 0
+ }, 
+ "270-480": {
+  "BranchLength": {
+   "NS": 0, 
+   "S": 0.001619719219765492
+  }, 
+  "Diversity": {
+   "NS": 0, 
+   "S": 0.000464686600395199
+  }, 
+  "Tree": {
+   "Combined": "(cluster_0_1187:0,cluster_4_65:0.004859157659296476,cluster_7_40:0)", 
+   "NS": "(cluster_0_1187:0,cluster_4_65:0,cluster_7_40:0)", 
+   "S": "(cluster_0_1187:0,cluster_4_65:0.004859157659296476,cluster_7_40:0)"
+  }, 
+  "omega": 0
+ }, 
+ "300-510": {
+  "BranchLength": {
+   "NS": 0, 
+   "S": 0
+  }, 
+  "Diversity": {
+   "NS": 0, 
+   "S": 0
+  }, 
+  "Tree": "", 
+  "omega": 0
+ }, 
+ "330-540": {
+  "BranchLength": {
+   "NS": 0, 
+   "S": 0
+  }, 
+  "Diversity": {
+   "NS": 0, 
+   "S": 0
+  }, 
+  "Tree": "", 
+  "omega": 0
+ }
+}
